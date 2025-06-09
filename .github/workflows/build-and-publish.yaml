@@ -24,12 +24,27 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: infini-gram-${{ matrix.os }}-${{ strategy.job-index }}
+          name: infini-gram-${{ matrix.os }}
           path: ./wheelhouse/*.whl
+
+  merge_and_publish:
+    name: Merge and publish wheels
+    runs-on: ubuntu-latest
+    needs: build_wheels
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: infini-gram-ubuntu-latest
+          path: merged_wheelhouse
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: infini-gram-macos-14
+          path: merged_wheelhouse
 
       - name: Generate simple index.html
         run: |
-          cd wheelhouse
+          cd merged_wheelhouse
           echo '<html><body>' > index.html
           for f in *.whl; do
             echo "<a href=\"$f\">$f</a><br>" >> index.html
@@ -37,11 +52,9 @@ jobs:
           echo '</body></html>' >> index.html
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/master'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: wheelhouse
-          target-folder: docs
-          clean: false
-    
+          folder: merged_wheelhouse
+          target-folder: packages/simple/infini-gram/
+          clean: true
