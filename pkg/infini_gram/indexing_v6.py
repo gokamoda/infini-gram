@@ -274,6 +274,9 @@ def prepare(args):
         # # The following is a faster version, but the result is a bit different
         # from dolma.tokenizer import Tokenizer
         # tokenizer = Tokenizer.from_pretrained('allenai/gpt-neox-olmo-dolma-v1_5', bos_token_id=None, eos_token_id=None, pad_token_id=1, segment_before_tokenization=True)
+    elif args.tokenizer == 'llm-jp-3':
+        tokenizer = transformers.AutoTokenizer.from_pretrained('llm-jp/llm-jp-3-1.8b', use_fast=False, add_bos_token=False, add_eos_token=False)
+        assert args.token_dtype == 'u32', 'llm-jp-3 tokenizer requires u32 token dtype as vocab size is larger than 65536'
     else:
         raise ValueError(f'Unknown tokenizer: {args.tokenizer}')
 
@@ -384,7 +387,7 @@ def main():
     parser.add_argument('--save_dir', type=str, required=True, help='Directory where the final index files are stored. Must be absolute path.')
     parser.add_argument('--version', type=int, default=6, choices=[6], help='Version of the index.')
     parser.add_argument('--reversed', default=False, action='store_true', help='Whether to reverse the tokens in each document.')
-    parser.add_argument('--tokenizer', type=str, default=None, choices=[None, 'gpt2', 'llama', 'olmo'])
+    parser.add_argument('--tokenizer', type=str, default=None, choices=[None, 'gpt2', 'llama', 'olmo', 'llm-jp-3'])
     parser.add_argument('--token_dtype', type=str, default='u16', choices=['u8', 'u16', 'u32'], help='Data type for tokens.')
     parser.add_argument('--add_metadata', default=False, action='store_true', help='Whether to store document metadata in the index.')
     parser.add_argument('--add_unigram', default=False, action='store_true', help='Whether to precompute unigram counts.')
