@@ -2,6 +2,10 @@
 
 - added llm-jp tokenizer. (need u32 as vocab size exceeds 65536)
 
+```
+uv add infini-gram --find-links https://gokamoda.github.io/infini-gram/
+```
+
 This repo hosts the source code of the [infini-gram search engine](https://infini-gram.io/), which is described in this paper: [Infini-gram: Scaling Unbounded n-gram Language Models to a Trillion Tokens](https://arxiv.org/abs/2401.17377).
 
 To learn more about infini-gram:
