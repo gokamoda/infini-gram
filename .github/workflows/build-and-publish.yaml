@@ -58,5 +58,5 @@ jobs:
         with:
           branch: gh-pages
           folder: merged_wheelhouse
-          target-folder: packages/simple/infini-gram/
+          target-folder: docs
           clean: true
