@@ -26,3 +26,13 @@ jobs:
         with:
           name: infini-gram-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/master'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: wheelhouse
+          target-folder: packages/simple/infini-gram/
+          clean: false
+    
